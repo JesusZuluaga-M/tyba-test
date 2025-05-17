@@ -1,0 +1,22 @@
+
+services:
+  pgvector:
+    image: ankane/pgvector
+    container_name: pgvector
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env.deployment
+    volumes:
+      - pgvector-data:/var/lib/postgresql/data
+    networks:
+      - tyba-net
+
+
+volumes:
+  pgvector-data:
+
+networks:
+  tyba-net:
+    driver: bridge

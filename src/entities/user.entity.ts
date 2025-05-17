@@ -1,7 +1,22 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
-import { IsAlpha, IsDate, IsNumber, IsString, MinLength } from 'class-validator';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
+} from 'typeorm';
+import {
+  IsAlpha,
+  IsDate,
+  IsNumber,
+  IsString,
+  MinLength,
+} from 'class-validator';
 
-@Entity()
+@Entity({
+  name: 'users',
+})
 export class User {
   @PrimaryGeneratedColumn()
   @IsNumber()
@@ -14,7 +29,7 @@ export class User {
 
   @IsString()
   @IsAlpha()
-  fullname: string
+  fullname: string;
 
   @Column()
   @IsString()

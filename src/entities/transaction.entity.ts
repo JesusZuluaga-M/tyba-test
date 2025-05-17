@@ -1,12 +1,20 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+} from 'typeorm';
 
-@Entity()
+@Entity({
+  name: 'transactions',
+})
 export class Transaction {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  userId: number; 
+  userId: number;
 
   @Column('decimal', { precision: 10, scale: 2 })
   amount: number;
@@ -16,4 +24,7 @@ export class Transaction {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt?: Date;
 }

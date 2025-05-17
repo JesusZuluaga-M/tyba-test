@@ -1,9 +1,13 @@
-import { IsString, Matches, MinLength } from 'class-validator'
+import { IsString, Matches, MinLength } from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
   @MinLength(8)
   username: string;
+
+  @IsString()
+  @MinLength(8)
+  fullname: string;
 
   @IsString()
   @Matches(/^(?=.*[A-Z])(?=.*\d).{8,}$/, {

@@ -1,19 +1,22 @@
-import { Injectable, BadRequestException, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { LoginUserDto } from './dto/login.user.dto'
+import { LoginUserDto } from './dto/login.user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
-import { hashPassword } from '../../utils/secure';
+import { generateSignature, hashPassword } from '../../utils/secure';
 import { comparePassword } from 'src/utils/compared';
 
 @Injectable()
 export class AuthService {
-
   constructor(
     @InjectRepository(User)
-    private userRepository: Repository<User>,
-  ) { }
+    private readonly userRepository: Repository<User>,
+  ) {}
 
   async createUser(payload: CreateUserDto) {
     try {
@@ -39,7 +42,6 @@ export class AuthService {
         username: newUser.username,
         created_at: newUser.created_at,
       };
-
     } catch (error) {
       if (error instanceof BadRequestException) {
         throw error;
@@ -53,31 +55,47 @@ export class AuthService {
   async loginUser(payload: LoginUserDto) {
     try {
       const userFound = await this.userRepository.findOne({
-        where: { 'username': payload.username }
+        where: { username: payload.username },
       });
 
       if (!userFound) {
         throw new BadRequestException('Incorrect User');
       }
 
-      const validPassword = await comparePassword(payload.password, userFound.password);
+      const validPassword = await comparePassword(
+        payload.password,
+        userFound.password,
+      );
 
       if (!validPassword) {
-        throw new BadRequestException('Invalid password')
+        throw new BadRequestException('Invalid password');
       }
 
-      return {
-      id: userFound.id,
-      username: userFound.username,
-      created_at: userFound.created_at,
-    };
+      const token = generateSignature(userFound);
 
+      return {
+        id: userFound.id,
+        username: userFound.username,
+        created_at: userFound.created_at,
+        token,
+      };
     } catch (error) {
       if (error instanceof BadRequestException) {
         throw error;
       }
 
       console.error('Error en login:', error);
+      throw new InternalServerErrorException('Internal Server Error');
+    }
+  }
+
+  session() {
+    try {
+      return {
+        message: 'Session is active',
+      };
+    } catch (error) {
+      console.error('Error en session:', error);
       throw new InternalServerErrorException('Internal Server Error');
     }
   }
