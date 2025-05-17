@@ -9,6 +9,8 @@ import { Configuration } from './types/configuration';
 import { User } from './entities/user.entity';
 import { Transaction } from './entities/transaction.entity';
 import { SessionMiddleware } from './middlewares/session.middleware';
+import { CacheModule } from '@nestjs/cache-manager';
+import * as redisStore from 'cache-manager-ioredis';
 
 const env_file = '.env.' + process.env.NODE_ENV;
 
@@ -36,6 +38,18 @@ const env_file = '.env.' + process.env.NODE_ENV;
         } as TypeOrmModuleOptions;
 
         return config;
+      },
+      inject: [ConfigService],
+    }),
+    CacheModule.registerAsync({
+      isGlobal: true,
+      useFactory(configService: ConfigService) {
+        const config = configService.get('config') as Configuration;
+        const redisConfig = config.redis;
+        return {
+          store: redisStore,
+          url: redisConfig.url,
+        };
       },
       inject: [ConfigService],
     }),

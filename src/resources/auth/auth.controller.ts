@@ -25,4 +25,19 @@ export class AuthController {
     }
     return req.session;
   }
+
+  @Get('/logout')
+  async logout(@Request() req: RequestWithSession) {
+    if (!req.session) {
+      return { message: 'No session found' };
+    }
+
+    const token = req.headers['authorization']?.split(' ')[1];
+    if (!token) {
+      return { message: 'No token found' };
+    }
+
+    await this.authService.logoutUser(token);
+    return { message: 'Logged out successfully' };
+  }
 }

@@ -2,6 +2,7 @@ import {
   Injectable,
   BadRequestException,
   InternalServerErrorException,
+  Inject,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login.user.dto';
@@ -10,12 +11,14 @@ import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
 import { generateSignature, hashPassword } from '../../utils/secure';
 import { comparePassword } from 'src/utils/compared';
+import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @Inject(CACHE_MANAGER) private readonly cache: Cache,
   ) {}
 
   async createUser(payload: CreateUserDto) {
@@ -89,13 +92,19 @@ export class AuthService {
     }
   }
 
-  session() {
+  async logoutUser(token: string) {
     try {
-      return {
-        message: 'Session is active',
-      };
+      const key = `blacklist:${token}`;
+      await this.cache.set(key, true, 3600 * 1000);
+
+      const tokenData = await this.cache.get(key);
+      if (!tokenData) {
+        throw new BadRequestException('Token not found in cache');
+      }
+
+      return { message: 'Logout successful' };
     } catch (error) {
-      console.error('Error en session:', error);
+      console.error('Error en logout:', error);
       throw new InternalServerErrorException('Internal Server Error');
     }
   }
