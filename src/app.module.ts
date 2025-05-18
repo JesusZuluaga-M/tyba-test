@@ -10,6 +10,8 @@ import { User } from './entities/user.entity';
 import { Transaction } from './entities/transaction.entity';
 import { SessionMiddleware } from './middlewares/session.middleware';
 import { CacheModule } from '@nestjs/cache-manager';
+import { TransactionModule } from './resources/transaction/transaction.module';
+import { RestaurantesModule } from './resources/restaurantes/restaurantes.module';
 import * as redisStore from 'cache-manager-ioredis';
 
 const env_file = '.env.' + process.env.NODE_ENV;
@@ -53,6 +55,8 @@ const env_file = '.env.' + process.env.NODE_ENV;
       },
       inject: [ConfigService],
     }),
+    TransactionModule,
+    RestaurantesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
