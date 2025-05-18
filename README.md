@@ -151,23 +151,6 @@ Aún no se ha incluido testing automatizado, pero puede integrarse con Jest fác
 
 ---
 
-## 📂 Estructura del proyecto
-
-```
-tyba/
-├── src/
-│   ├── auth/
-│   ├── restaurantes/
-│   ├── transactions/
-│   └── main.ts
-├── Dockerfile
-├── .dockerignore
-├── .env.deployment
-└── docker-compose.yml
-```
-
----
-
 ## 📝 Licencia
 
 Este proyecto se publica sin restricciones de uso durante el desarrollo.
