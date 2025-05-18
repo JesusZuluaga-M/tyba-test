@@ -7,7 +7,7 @@ RUN apk add --no-cache openssl && \
   npm install && \
   npm run build && \
   chmod +x ./tokens.sh && \
-  ./tokens.sh && \ 
-  npx typeorm migration:run -d src/data-source.ts
+  ./tokens.sh && \
+  chmod +x ./entrypoint.sh
 
-CMD ["node", "dist/main"]
+ENTRYPOINT [ "./entrypoint.sh" ]
