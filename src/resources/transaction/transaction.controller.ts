@@ -16,6 +16,8 @@ export class TransactionController {
 
   @Get('/getalltransactions')
   async transactions(@Req() req: RequestWithSession) {
+    // Verificamos siempre si existe la session
+    // y si el usuario tiene una session activa
     if (!req.session || !req.session.userId) {
       throw new UnauthorizedException('Invalid session');
     }
@@ -28,6 +30,7 @@ export class TransactionController {
     @Req() req: RequestWithSession,
     @Body() transactionData: CreateTransactionDto,
   ) {
+    // Siempre validamos que la session existe
     if (!req.session || !req.session.userId) {
       throw new UnauthorizedException('User not logged in');
     }

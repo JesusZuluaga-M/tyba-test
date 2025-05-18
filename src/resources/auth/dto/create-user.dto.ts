@@ -1,5 +1,8 @@
 import { IsString, Matches, MinLength } from 'class-validator';
 
+/**
+ * DTO para crear un nuevo usuario.
+ */
 export class CreateUserDto {
   @IsString()
   @MinLength(8)

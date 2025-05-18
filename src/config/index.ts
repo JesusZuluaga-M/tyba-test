@@ -1,6 +1,9 @@
 // src/config.ts
 import { ConfigFactory } from '@nestjs/config';
 
+/**
+ * Configuracion de como se cargan las variables de entorno
+ */
 export const loadEnv: ConfigFactory = () => ({
   port: parseInt(process.env.PORT || '3000', 10),
   db: {

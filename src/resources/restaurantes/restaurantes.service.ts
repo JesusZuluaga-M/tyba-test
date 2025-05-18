@@ -5,6 +5,8 @@ import axios from 'axios';
 @Injectable()
 export class RestaurantesService {
   async getRestaurantsNearCoords(lat: number, lon: number, radius = 5000) {
+    // Usando la API de Open Street Map (nominatim) para obtener los restaurantes cercanos
+    // Usamos el query necesario para utilizar los endpoints de la API
     const query = `
       [out:json];
       node
@@ -18,6 +20,7 @@ export class RestaurantesService {
       headers: { 'Content-Type': 'text/plain' },
     });
 
+    // Si todo se verifica, devolvemos los restaurantes encontrados
     return response.data.elements.map((el: any) => ({
       id: el.id,
       name: el.tags?.name || 'Unnamed',
@@ -27,11 +30,13 @@ export class RestaurantesService {
     }));
   }
 
+  // Usando la API de Open Street Map (nominatim) para obtener las coordenadas de la ciudad
   async getCoordsByCity(city: string) {
     const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(city)}`;
 
     const response = await axios.get(url);
 
+    // En caso tal de que no haya datos validos de la ciudad, lanzamos un error
     if (response.data.length === 0) {
       throw new Error('City not found');
     }

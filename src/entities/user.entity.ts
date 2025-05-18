@@ -14,6 +14,11 @@ import {
   MinLength,
 } from 'class-validator';
 
+/*
+  Esta entidad representa un usuario en la base de datos.
+  Contiene información sobre el nombre de usuario, el nombre completo,
+  la contraseña y las fechas de creación, actualización y eliminación.
+*/
 @Entity({
   name: 'users',
 })

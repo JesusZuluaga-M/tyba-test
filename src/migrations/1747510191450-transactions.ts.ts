@@ -1,5 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
+// A continacion creamos la migracion para la tabla que almacenara las transacciones de los usuarios
 export class Transactions_ts1747510191450 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`

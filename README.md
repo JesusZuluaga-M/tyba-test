@@ -1,5 +1,5 @@
 
-# Proyecto Tyba - Backend con NestJS, PostgreSQL, Redis y Docker
+# PRueba Tyba - Backend con NestJS, PostgreSQL, Redis y Docker
 
 Este proyecto es un backend construido con [NestJS](https://nestjs.com/) que ofrece funcionalidades de autenticación, consulta de restaurantes y gestión de transacciones. Utiliza PostgreSQL con soporte para vectores (`pgvector`) y Redis para almacenamiento en caché.
 

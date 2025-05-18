@@ -20,6 +20,7 @@ export class AuthController {
 
   @Get('/me')
   session(@Request() req: RequestWithSession) {
+    // Verificamos siempre si existe la session
     if (!req.session) {
       return { message: 'No session found' };
     }

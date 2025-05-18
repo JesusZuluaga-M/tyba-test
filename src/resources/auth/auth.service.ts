@@ -23,23 +23,29 @@ export class AuthService {
 
   async createUser(payload: CreateUserDto) {
     try {
+      // Verificamos en la base de datos si existe el usuario
       const existingUser = await this.userRepository.findOne({
         where: { username: payload.username },
       });
 
+      // Si existe, lanzamos una excepcion para que no se pueda crear otro usuario igual
       if (existingUser) {
         throw new BadRequestException('This name is already used');
       }
 
+      // Encriptamos la contraseña antes de guardarla
       const hashedPassword = await hashPassword(payload.password);
 
+      // Creamos el nuevo usuario
       const newUser = this.userRepository.create({
         ...payload,
         password: hashedPassword,
       });
 
+      // Lo guardamos en la base de datos ya que el .create() no lo hace, solo crea una instancia
       await this.userRepository.save(newUser);
 
+      // Mostramos el usuario creado sin la contraseña
       return {
         id: newUser.id,
         username: newUser.username,
@@ -65,6 +71,7 @@ export class AuthService {
         throw new BadRequestException('Incorrect User');
       }
 
+      // Compara la contraseña ingresada con la almacenada en la base de datos
       const validPassword = await comparePassword(
         payload.password,
         userFound.password,
@@ -73,7 +80,7 @@ export class AuthService {
       if (!validPassword) {
         throw new BadRequestException('Invalid password');
       }
-
+      // Genera el token de acceso
       const token = generateSignature(userFound);
 
       return {
@@ -97,6 +104,9 @@ export class AuthService {
       const key = `blacklist:${token}`;
       await this.cache.set(key, true, 3600 * 1000);
 
+      // Verificamos si el token fue guardado en la cache
+      // Si no fue guardado, lanzamos una excepcion
+      // Esto es para evitar que el token sea utilizado nuevamente
       const tokenData = await this.cache.get(key);
       if (!tokenData) {
         throw new BadRequestException('Token not found in cache');

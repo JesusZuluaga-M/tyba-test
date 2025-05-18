@@ -6,6 +6,11 @@ import {
   DeleteDateColumn,
 } from 'typeorm';
 
+/*
+  Esta entidad representa una transacción en la base de datos.
+  Contiene información sobre el usuario, la cantidad de dinero movido,
+  la descripción de la transacción y las fechas de creación y eliminación.
+*/
 @Entity({
   name: 'transactions',
 })

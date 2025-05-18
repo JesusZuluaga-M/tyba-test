@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt';
 
-// función para comparar contraseñas (en utils/secure.ts o donde tengas)
+// función para comparar contraseñas
 export async function comparePassword(
   plainPassword: string,
   hashedPassword: string,

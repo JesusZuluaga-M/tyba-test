@@ -1,6 +1,12 @@
 import { Configuration } from '../types/configuration';
 import { registerAs } from '@nestjs/config';
 
+/**
+Este archivo es el encargado de cargar la configuración de la aplicación
+a partir de las variables de entorno definidas en el archivo .env
+y de exportar la configuración como un objeto de tipo Configuration.
+*/
+
 const acceptableEnvironments = ['development', 'production'];
 
 export default registerAs('config', (): Configuration => {
