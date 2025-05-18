@@ -1,11 +1,8 @@
-
 services:
   pgvector:
     image: ankane/pgvector
     container_name: pgvector
     restart: unless-stopped
-    ports:
-      - "5432:5432"
     env_file:
       - .env.deployment
     volumes:
@@ -13,6 +10,27 @@ services:
     networks:
       - tyba-net
 
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: unless-stopped
+    networks:
+      - tyba-net
+
+  tyba:
+    build:
+      context: .
+    container_name: tyba
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.deployment
+    depends_on:
+      - pgvector
+      - redis
+    networks:
+      - tyba-net
 
 volumes:
   pgvector-data:

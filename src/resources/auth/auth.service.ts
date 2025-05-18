@@ -7,10 +7,10 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login.user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/entities/user.entity';
+import { User } from '../../entities/user.entity';
+import { comparePassword } from '../../utils/compared';
 import { Repository } from 'typeorm';
 import { generateSignature, hashPassword } from '../../utils/secure';
-import { comparePassword } from 'src/utils/compared';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 
 @Injectable()
